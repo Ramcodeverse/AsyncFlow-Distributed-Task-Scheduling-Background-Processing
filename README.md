@@ -9,7 +9,15 @@
 AsyncFlow is a production-grade, distributed task scheduling and background processing platform built to execute, monitor, and manage long-running background jobs without blocking HTTP request threads.
 
  
-<img width="426" height="240" alt="AsyncFlow — Distributed Task Scheduling   Background Processing" src="https://github.com/user-attachments/assets/b60c9c9d-65db-4931-9a32-0fd0551ebce0" />
+## 🎬 AsyncFlow — Live Demo
+
+<p align="center">
+  <img
+    src="assets/AsyncFlow%20%E2%80%94%20Distributed%20Task%20Scheduling%20%26%20Background%20Processing.gif"
+    alt="AsyncFlow — Distributed Task Scheduling & Background Processing"
+    width="850"
+  />
+</p>
 
 
 
