@@ -1,0 +1,8 @@
+{
+  "name": "AsyncFlow — Distributed Task Scheduling & Background Processing",
+  "description": "Production-grade distributed task scheduling, queue monitoring, worker management, and resilient background processing platform.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
