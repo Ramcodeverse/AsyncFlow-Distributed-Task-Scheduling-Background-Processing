@@ -9,7 +9,9 @@ import {
   ArrowRight,
   Layers,
   Sparkles,
-  Info
+  Info,
+  Terminal,
+  Code2
 } from 'lucide-react';
 import { api } from '../lib/api';
 import { TaskType, TaskPriority } from '../types';
@@ -57,6 +59,33 @@ export const TaskNew: React.FC = () => {
     stepCount: 4,
   });
 
+  const [pythonConfig, setPythonConfig] = useState({
+    preset: 'monte_carlo',
+    scriptTitle: 'Monte Carlo Quantile Simulation',
+    pythonCode: `# AsyncFlow Python 3.10 Workload Engine
+import math
+import statistics
+
+# Run high-iteration numerical simulation
+trials = [math.sin(i * 0.05) * 20.0 + 50.0 + ((i % 19) * 1.2) for i in range(2500)]
+mean_val = statistics.mean(trials)
+median_val = statistics.median(trials)
+sorted_t = sorted(trials)
+p95 = sorted_t[int(0.95 * len(sorted_t))]
+
+print(f"Executed 2,500 trials in Python 3.10. Mean: {mean_val:.2f}, P95: {p95:.2f}")
+
+result = {
+    "engine": "CPython 3.10",
+    "trials": len(trials),
+    "mean": round(mean_val, 2),
+    "median": round(median_val, 2),
+    "p95": round(p95, 2),
+    "status": "converged"
+}
+`,
+  });
+
   const taskTypeCards = [
     {
       id: 'pdf_report' as TaskType,
@@ -74,15 +103,22 @@ export const TaskNew: React.FC = () => {
     },
     {
       id: 'data_processing' as TaskType,
-      name: 'Dataset Processing',
-      desc: 'Batch aggregates metrics, computes quantiles, and produces structured analytics summaries.',
+      name: 'Dataset Processing (Python)',
+      desc: 'Python-powered batch aggregation, quantile mathematical transforms, and distribution summaries.',
       icon: Cpu,
+      queue: 'data_processing',
+    },
+    {
+      id: 'python_script' as TaskType,
+      name: 'Python 3.10 Workload',
+      desc: 'Executes custom Python code in real CPython subprocess with AST isolation, live logs, and JSON outputs.',
+      icon: Terminal,
       queue: 'data_processing',
     },
     {
       id: 'file_validation' as TaskType,
       name: 'Schema & File Validation',
-      desc: 'Inspects magic bytes, validates column bounds, and checks integrity invariants.',
+      desc: 'Python AST integrity checks, column bounds, and SHA256 checksum invariants.',
       icon: ShieldCheck,
       queue: 'default',
     },
@@ -97,7 +133,7 @@ export const TaskNew: React.FC = () => {
 
   const getTargetQueue = () => {
     if (taskType === 'pdf_report' || taskType === 'csv_report') return 'reports';
-    if (taskType === 'data_processing') return 'data_processing';
+    if (taskType === 'data_processing' || taskType === 'python_script') return 'data_processing';
     return 'default';
   };
 
@@ -115,6 +151,7 @@ export const TaskNew: React.FC = () => {
     if (taskType === 'pdf_report') payload = pdfConfig;
     else if (taskType === 'csv_report') payload = csvConfig;
     else if (taskType === 'data_processing') payload = dataConfig;
+    else if (taskType === 'python_script') payload = pythonConfig;
     else if (taskType === 'file_validation') payload = valConfig;
     else if (taskType === 'simulated_job') payload = simConfig;
 
@@ -168,6 +205,7 @@ export const TaskNew: React.FC = () => {
                     if (t.id === 'pdf_report') setTaskName('Quarterly Performance Audit Report');
                     else if (t.id === 'csv_report') setTaskName('Weekly Telemetry Logs Export');
                     else if (t.id === 'data_processing') setTaskName('Cluster Quantile Latency Analysis');
+                    else if (t.id === 'python_script') setTaskName('Monte Carlo Quantile Simulation');
                     else if (t.id === 'file_validation') setTaskName('Customer Ingest File Schema Check');
                     else setTaskName('Simulated Long-Running Batch Workload');
                   }}
@@ -388,6 +426,121 @@ export const TaskNew: React.FC = () => {
                     value={simConfig.failureInjectionPercent}
                     onChange={e => setSimConfig({ ...simConfig, failureInjectionPercent: Number(e.target.value) })}
                     className="w-full accent-purple-500"
+                  />
+                </div>
+              </div>
+            )}
+
+            {taskType === 'python_script' && (
+              <div className="space-y-3 bg-slate-950 p-4 rounded-lg border border-slate-800">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-800/80">
+                  <div className="flex items-center gap-2">
+                    <Terminal className="w-4 h-4 text-emerald-400" />
+                    <span className="text-xs font-semibold text-slate-200">Python 3.10 Code Editor</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800/50">
+                      CPython 3.10.12
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-slate-400">Load Recipe:</span>
+                    <select
+                      value={pythonConfig.preset}
+                      onChange={e => {
+                        const pr = e.target.value;
+                        let code = pythonConfig.pythonCode;
+                        let title = 'Custom Python Script';
+                        if (pr === 'monte_carlo') {
+                          title = 'Monte Carlo Quantile Simulation';
+                          code = `# AsyncFlow Python 3.10 Workload Engine
+import math
+import statistics
+
+# Run high-iteration numerical simulation
+trials = [math.sin(i * 0.05) * 20.0 + 50.0 + ((i % 19) * 1.2) for i in range(2500)]
+mean_val = statistics.mean(trials)
+median_val = statistics.median(trials)
+sorted_t = sorted(trials)
+p95 = sorted_t[int(0.95 * len(sorted_t))]
+
+print(f"Executed 2,500 trials in Python 3.10. Mean: {mean_val:.2f}, P95: {p95:.2f}")
+
+result = {
+    "engine": "CPython 3.10",
+    "trials": len(trials),
+    "mean": round(mean_val, 2),
+    "median": round(median_val, 2),
+    "p95": round(p95, 2),
+    "status": "converged"
+}
+`;
+                        } else if (pr === 'log_anomaly') {
+                          title = 'Log Anomaly & Z-Score Analysis';
+                          code = `# Anomaly Detection via Python Statistics
+import statistics
+import math
+
+latencies = [42.1, 44.5, 43.8, 45.0, 42.9, 148.2, 43.1, 44.0, 46.2, 210.5]
+mean_l = statistics.mean(latencies)
+stdev_l = statistics.stdev(latencies)
+
+anomalies = [x for x in latencies if abs(x - mean_l) > (2 * stdev_l)]
+print(f"Detected {len(anomalies)} anomalous outliers (> 2 sigma)")
+
+result = {
+    "sampleCount": len(latencies),
+    "meanLatency": round(mean_l, 2),
+    "stdev": round(stdev_l, 2),
+    "anomalies": anomalies
+}
+`;
+                        } else if (pr === 'data_cleansing') {
+                          title = 'Batch Tabular Deduplication';
+                          code = `# Tabular Hash Deduplication
+import hashlib
+import json
+
+raw_records = [
+    {"user": f"usr_{i % 50}", "event": "page_view", "path": "/dashboard"}
+    for i in range(1200)
+]
+
+unique_records = {}
+for r in raw_records:
+    sig = hashlib.sha256(json.dumps(r, sort_keys=True).encode()).hexdigest()
+    unique_records[sig] = r
+
+print(f"Deduplicated {len(raw_records)} rows into {len(unique_records)} unique entities")
+
+result = {
+    "inputRows": len(raw_records),
+    "uniqueRows": len(unique_records),
+    "reductionRatio": round((1 - len(unique_records) / len(raw_records)) * 100, 1)
+}
+`;
+                        }
+                        setPythonConfig({ ...pythonConfig, preset: pr, pythonCode: code, scriptTitle: title });
+                        setTaskName(title);
+                      }}
+                      className="bg-slate-900 border border-slate-800 text-xs rounded px-2 py-1 text-slate-200"
+                    >
+                      <option value="monte_carlo">Monte Carlo Simulation</option>
+                      <option value="log_anomaly">Z-Score Anomaly Detection</option>
+                      <option value="data_cleansing">Hash Deduplication</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex justify-between items-center text-[11px] text-slate-400">
+                    <span>Python Code (Executes in dedicated CPython subprocess with stdout telemetry)</span>
+                    <span className="font-mono text-slate-500">backend/app/tasks/py_worker.py</span>
+                  </div>
+                  <textarea
+                    rows={10}
+                    value={pythonConfig.pythonCode}
+                    onChange={e => setPythonConfig({ ...pythonConfig, pythonCode: e.target.value })}
+                    className="w-full bg-slate-900/90 border border-slate-800 font-mono text-xs rounded-lg p-3 text-emerald-300 focus:outline-none focus:ring-1 focus:ring-emerald-500 leading-relaxed selection:bg-emerald-900 selection:text-white"
+                    placeholder="# Enter Python 3 code..."
                   />
                 </div>
               </div>

@@ -31,7 +31,8 @@ export type TaskType =
   | 'csv_report'
   | 'data_processing'
   | 'file_validation'
-  | 'simulated_job';
+  | 'simulated_job'
+  | 'python_script';
 
 export type QueueName = 'default' | 'reports' | 'data_processing' | 'maintenance';
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Cpu, RefreshCw, Radio, HardDrive, CheckCircle2, AlertTriangle, Activity } from 'lucide-react';
+import { Cpu, RefreshCw, Radio, HardDrive, CheckCircle2, AlertTriangle, Activity, Terminal, Code2 } from 'lucide-react';
 import { api } from '../lib/api';
 import { WorkerInfo } from '../types';
 

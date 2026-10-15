@@ -275,6 +275,24 @@ class ApiClient {
       method: 'POST',
     });
   }
+
+  async getPythonSystemInfo(): Promise<{
+    status: string;
+    runtime: string;
+    path: string;
+    workerModule: string;
+    supportedEngines: string[];
+    features: Record<string, boolean>;
+  }> {
+    return this.request<{
+      status: string;
+      runtime: string;
+      path: string;
+      workerModule: string;
+      supportedEngines: string[];
+      features: Record<string, boolean>;
+    }>('/system/python');
+  }
 }
 
 export const api = new ApiClient();
