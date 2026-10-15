@@ -12,11 +12,8 @@ AsyncFlow is a production-grade, distributed task scheduling and background proc
 ## 🎬 AsyncFlow — Live Demo
 
 <p align="center">
-  <img
-    src="assets/AsyncFlow%20%E2%80%94%20Distributed%20Task%20Scheduling%20%26%20Background%20Processing.gif"
-    alt="AsyncFlow — Distributed Task Scheduling & Background Processing"
-    width="850"
-  />
+  <video src="assets/AsyncFlow%20%E2%80%94%20Distributed%20Task%20Scheduling%20%26%20Background-Processing.mp4" width="850" controls>
+  </video>
 </p>
 
 
